@@ -34,7 +34,7 @@ class App extends Component {
       <div className="App">
         <div className="container">
           <Header />
-          <AddFolder addFolder={this.addFolder}/>
+          {/* <AddFolder addFolder={this.addFolder}/> */}
           {/* <Folders folders={this.state.folders}  */}
           {/* delFolder={this.delFolder}/> */}
         </div>

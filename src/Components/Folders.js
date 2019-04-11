@@ -2,8 +2,15 @@ import React, { Component } from 'react';
 import FolderItem from './FolderItem';
 import PropTypes from 'prop-types';
 import values from 'lodash/values'
+import AddFolder from './AddFolder'
 
 const data = {
+  '/a': {
+    path: '/a',
+    type: 'folder',
+    isRoot: true,
+    children: []
+  },
   '/root': {
     path: '/root',
     type: 'folder',
@@ -46,6 +53,19 @@ class Folders extends Component {
   state = {
     folderItems: data,
   };
+
+  // Add Folder
+  addFolder = (title, path, type, children) => {
+    const newFolder = {
+      title: title,
+      path: "/" + title,
+      isRoot: true,
+      type: type,
+      children: children,
+      completed: false
+    }
+    this.setState(data[path] = newFolder); // Look into this
+  }
 
   // Returns top-level folder
   getRootFolderItems = () => {
@@ -93,7 +113,10 @@ class Folders extends Component {
             onFolderItemSelect={this.onFolderItemSelect}
           />
         ))}
+        <AddFolder addFolder={this.addFolder} />
       </div>
+      
+        
     )
   }
 }
