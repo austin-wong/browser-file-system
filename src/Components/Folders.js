@@ -15,56 +15,69 @@ const data = {
     path: '/root',
     type: 'folder',
     isRoot: true,
-    children: ['/root/austin', '/root/brandon'],
+    children: ['/root/test1', '/root/test2'],
   },
-  '/root/austin': {
-    path: '/root/austin',
+  '/root/test1': {
+    path: '/root/test1',
     type: 'folder',
-    children: ['/root/austin/readme.md'],
+    children: ['/root/test1/readme.md'],
   },
-  '/root/austin/readme.md': {
-    path: '/root/austin/readme.md',
+  '/root/test1/readme.md': {
+    path: '/root/test1/readme.md',
     type: 'file',
     content: 'There is nothing here.'
   },
-  '/root/brandon': {
-    path: '/root/brandon',
+  '/root/test2': {
+    path: '/root/test2',
     type: 'folder',
-    children: ['/root/brandon/projects', '/root/brandon/vblogs'],
+    children: ['/root/test2/pictures', '/root/test2/videos'],
   },
-  '/root/brandon/projects': {
-    path: '/root/brandon/projects',
+  '/root/test2/pictures': {
+    path: '/root/test2/pictures',
     type: 'folder',
-    children: ['/root/brandon/projects/treeview'],
+    children: ['/root/test2/pictures/vacation'],
   },
-  '/root/brandon/projects/treeview': {
-    path: '/root/brandon/projects/treeview',
+  '/root/test2/pictures/vacation': {
+    path: '/root/brandon/projects/vacation',
     type: 'folder',
     children: [],
   },
-  '/root/brandon/vblogs': {
-    path: '/root/brandon/vblogs',
+  '/root/test2/videos': {
+    path: '/root/test2/videos',
     type: 'folder',
     children: [],
   },
 };
 
 class Folders extends Component {
+
+  constructor(props) {
+    super(props);
+    this.addFolder = this.addFolder.bind(this);
+  }
+
   state = {
     folderItems: data,
   };
 
   // Add Folder
-  addFolder = (title, path, type, children) => {
+  addFolder = (title, path, type, children, isRoot) => {
     const newFolder = {
       title: title,
-      path: "/" + title,
-      isRoot: true,
+      path: path + '/' + title,
+      isRoot: isRoot,
       type: type,
       children: children,
       completed: false
     }
-    this.setState(data[path] = newFolder); // Look into this
+    data[newFolder.path] = newFolder;
+    this.setState({state: this.state}, function (){
+      this.forceUpdate();
+    });
+  }
+
+  renameItem = (folderItem) => {
+    this.setState();
   }
 
   // Returns top-level folder
@@ -93,6 +106,17 @@ class Folders extends Component {
     onSelect(folderItem);
   }
 
+  // Delete Item
+  delItem = (folderItem) => {
+    delete data[folderItem.path];
+    for (var key in data) {
+      if (key.includes(folderItem.path)) {
+        delete data[folderItem.path];
+      }
+    }
+    this.setState(data) ;
+  }
+
   // render() {
   //   console.log(this.props.folders)
   //   return this.props.folders.map((folder) => (
@@ -105,15 +129,18 @@ class Folders extends Component {
     const rootFolderItems = this.getRootFolderItems();
     return (
       <div>
+        <AddFolder addFolder={this.addFolder} />
         { rootFolderItems.map(folderItem => (
           <FolderItem
             folderItem={folderItem}
             getChildFolderItems={this.getChildFolderItems}
             onToggle={this.onToggle}
             onFolderItemSelect={this.onFolderItemSelect}
+            delItem={this.delItem}
+            renameItem={this.renameItem}
           />
         ))}
-        <AddFolder addFolder={this.addFolder} />
+        
       </div>
       
         
@@ -121,7 +148,6 @@ class Folders extends Component {
   }
 }
 
-// PropTypes
 Folders.propTypes = {
   // folders: PropTypes.array.isRequired,
   onSelect: PropTypes.func.isRequired,

@@ -29,11 +29,14 @@ const FolderIcon = styled.div`
 const getFolderItemName = (folderItem) => last(folderItem.path.split('/'));
 
 const FolderItem = (props) => {
-  const { folderItem, getChildFolderItems, level, onToggle, onFolderItemSelect } = props;
+  const { folderItem, getChildFolderItems, level, onToggle, onFolderItemSelect, delItem, renameItem } = props;
 
   return (
     <React.Fragment>
       <StyledTreeNode level={level} type={folderItem.type}>
+      <button onClick={() => delItem(folderItem)} style={btnStyle}>x</button> 
+      {/* <button onClick={() => renameItem(folderItem)}> Rename </button> */}
+
         <FolderIcon onClick={() => onToggle(folderItem)}>
           { folderItem.type === 'folder' && (folderItem.isOpen  ? <FaChevronDown /> : <FaChevronRight />) } 
         </FolderIcon>
@@ -48,7 +51,7 @@ const FolderItem = (props) => {
           { getFolderItemName(folderItem) }
         </span>
       </StyledTreeNode>
-
+      
     { folderItem.isOpen && getChildFolderItems(folderItem).map(childFolderItem => (
       <FolderItem
         {...props}
@@ -57,7 +60,18 @@ const FolderItem = (props) => {
       />
     ))}
   </React.Fragment>
+  
   );
+}
+
+const btnStyle = {
+  background: '#ff0000',
+  color: '#fff',
+  border: 'none',
+  padding: '3px 6px',
+  borderRadius: '50%',
+  cursor: 'pointer',
+  float: 'right'
 }
 
 
@@ -66,7 +80,7 @@ const FolderItem = (props) => {
 //     // Destructure
 //     const { id, title } = this.props.folder
 //     return (
-//       // Controls background color of each folder
+//       / / Controls background color of each folder
 //       <div style={itemStyle}>
 //         <p>
 //         { this.props.folder.title }
@@ -86,6 +100,8 @@ FolderItem.propTypes = {
   level: PropTypes.number.isRequired,
   onToggle: PropTypes.func.isRequired,
   onFolderItemSelect: PropTypes.func.isRequired,
+  delItem: PropTypes.func.isRequired,
+  renameItem: PropTypes.func.isRequired
 };
 
 FolderItem.defaultProps = {

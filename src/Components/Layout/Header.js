@@ -3,7 +3,7 @@ import React from 'react';
 function Header() {
     return (
         <header style={headerStyle}>
-            <h1>Files</h1>
+            <h1>File Explorer</h1>
         </header>
     )
 }

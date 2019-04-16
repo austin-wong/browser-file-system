@@ -1,29 +1,41 @@
 import React, { Component } from 'react'
 import DropdownButton from 'react-bootstrap/DropdownButton'
-import Dropdown from 'react-bootstrap/Dropdown'
 
 export class AddFolder extends Component {
   state = {
     titleFile: '',
     titleFolder: '',
-    path: './root',
+    path: '/root/austin', 
     type: '',
     children: []
+  }
+
+  constructor(props) {
+    super(props);
+  }
+
+  // TODO: 
+  onFolderItemClick = folderItem => {
+    const { onClick } = this.props;
+    onClick(folderItem);
+  }
+
+  // TODO: Return path of current folder item
+  getFolderItemPath = folderItem => {
+    const { folderItems } = this.state;
+    
   }
 
   onSubmitFile = (e) => {
       e.preventDefault();
       this.props.addFolder(this.state.titleFile, this.state.path, 'file', []);
       this.setState({ titleFile: '' });
-      console.log("hi");
   }
 
   onSubmitFolder = (e) => {
     e.preventDefault();
-    this.props.addFolder(this.state.titleFolder, this.state.path, 'folder', []);
+    this.props.addFolder(this.state.titleFolder, this.state.path, 'folder', [], false);
     this.setState({ titleFolder: '' });
-    console.log("hi");
-
 }
 
   onChangeFile = (e) => this.setState({ titleFile: e.target.value });
@@ -32,7 +44,6 @@ export class AddFolder extends Component {
   render() {
     return (
       <DropdownButton id="dropdown-basic-button" title="New" style={{float: 'right'}}>
-        <Dropdown.Item> 
           <form onSubmit={this.onSubmitFile} style={{display: 'flex'}}>
             <input
               type="text"
@@ -40,7 +51,7 @@ export class AddFolder extends Component {
               style={{ flex: '10', padding: '5px' }} 
               placeholder="Add File ..."
               value = {this.state.title}
-              onChangeFile={this.onChangeFile}
+              onChange={this.onChangeFile}  // onChange callback
             />
             <input 
               type="submit" 
@@ -49,16 +60,13 @@ export class AddFolder extends Component {
               style={{flex: '1'}} 
             />
           </form>
-        </Dropdown.Item>
-        
-        <Dropdown.Item>
           <form onSubmit={this.onSubmitFolder} style={{display: 'flex'}}>
             <input
               type="text"
               style={{ flex: '10', padding: '5px' }} 
               placeholder="Add Folder ..."
               value = {this.state.title}
-              onChangeFolder={this.onChangeFolder}
+              onChange={this.onChangeFolder}  //onChange callback
             />
             <input 
               type="submit" 
@@ -67,7 +75,6 @@ export class AddFolder extends Component {
               style={{flex: '1'}} 
             />
           </form>
-        </Dropdown.Item>
       </DropdownButton>
 
       // <form onSubmit={this.onSubmit} style={{display: 'flex' }}>
@@ -89,5 +96,6 @@ export class AddFolder extends Component {
     )
   }
 }
+
 
 export default AddFolder
